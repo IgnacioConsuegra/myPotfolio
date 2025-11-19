@@ -15,19 +15,36 @@ import { useState } from "react";
 export const ContactSection = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = (e) => {
+  const [name, setName] = useState("Your name");
+  const [email, setEmail] = useState("johndoe@gmail.com");
+  const [message, setMessage] = useState("Hello, I'd like to talk about");
+  const handleSubmit = async e => {
     e.preventDefault();
 
     setIsSubmitting(true);
-
-    setTimeout(() => {
-      toast({
-        title: "Message sent!",
-        description: "Thank you for your message. I'll get back to you soon.",
+    const data = { name, email, message };
+    const response = await fetch("http://localhost:4000/send-message", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then(response => response.json())
+      .then(result => {
+        setIsSubmitting(false);
+        if (result.success) {
+          toast({
+            title: "Message sent!",
+            description:
+              "Thank you for your message. I'll get back to you soon.",
+          });
+        }else{
+          toast({
+            title: "Error",
+            description:
+              "Something went wrong, please try later",
+          });
+        }
       });
-      setIsSubmitting(false);
-    }, 1500);
   };
   return (
     <section id="contact" className="py-24 px-4 relative bg-secondary/30">
@@ -93,10 +110,12 @@ export const ContactSection = () => {
             <div className="pt-8">
               <h4 className="font-medium mb-4"> Connect With Me</h4>
               <div className="flex space-x-4 justify-center">
-                <a href="https://www.linkedin.com/in/ignacio-consuegra-b8a9691b1/" target="_blank">
+                <a
+                  href="https://www.linkedin.com/in/ignacio-consuegra-b8a9691b1/"
+                  target="_blank"
+                >
                   <Linkedin />
                 </a>
-              
               </div>
             </div>
           </div>
@@ -114,15 +133,16 @@ export const ContactSection = () => {
                   className="block text-sm font-medium mb-2"
                 >
                   {" "}
-                  Your Name
+                  Your name
                 </label>
                 <input
                   type="text"
                   id="name"
                   name="name"
                   required
-                  className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary"
                   placeholder="John Doe"
+                  onChange={e => setName(e.target.value)}
                 />
               </div>
 
@@ -132,15 +152,16 @@ export const ContactSection = () => {
                   className="block text-sm font-medium mb-2"
                 >
                   {" "}
-                  Your Email
+                  Your email
                 </label>
                 <input
                   type="email"
                   id="email"
                   name="email"
                   required
-                  className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary"
                   placeholder="john@gmail.com"
+                  onChange={e => setEmail(e.target.value)}
                 />
               </div>
 
@@ -150,14 +171,15 @@ export const ContactSection = () => {
                   className="block text-sm font-medium mb-2"
                 >
                   {" "}
-                  Your Message
+                  Your messages
                 </label>
                 <textarea
                   id="message"
                   name="message"
                   required
-                  className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary resize-none"
+                  className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary resize-none"
                   placeholder="Hello, I'd like to talk about..."
+                  onChange={e => setMessage(e.target.value)}
                 />
               </div>
 
