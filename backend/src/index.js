@@ -1,9 +1,9 @@
 import express from "express";
-import nodemailer from "nodemailer";
 import cors from "cors";
 import dotenv from "dotenv";
 import { fileURLToPath } from "url";
 import path from "path";
+import { Resend } from "resend";
 
 dotenv.config();
 
@@ -17,39 +17,30 @@ app.use(
 );
 
 app.use(express.json());
-
+const resend = new Resend(process.env.RESEND_API_KEY);
 app.post("/send-message", async (req, res) => {
   const { name, email, message } = req.body;
 
   try {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASS,
-      },
+    const { data, error } = await resend.emails.send({
+      from: "Portfolio <onboarding@resend.dev>",
+      to: "ignacioandresconsuegradelacruz@gmail.com",
+      subject: "Portfolio message",
+      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
     });
 
-    // Email content
-    const mailOptions = {
-      from: `"Website Contact" <${process.env.GMAIL_USER}>`,
-      to: process.env.GMAIL_USER,
-      subject: "Portfolio message",
-      text: `
-        Name: ${name}
-        Email: ${email}
-        Message: ${message}
-      `,
-    };
+    if (error) {
+      console.error(error);
+      return res.status(500).json({ success: false, message: "Email failed" });
+    }
 
-    await transporter.sendMail(mailOptions);
-
-    res.json({ success: true, message: "Message sent successfully." });
-  } catch (error) {
-    console.error("Email error:", error);
-    res.status(500).json({ success: false, message: "Failed to send email." });
+    res.json({ success: true, message: "Message sent successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server email error" });
   }
 });
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 try {
