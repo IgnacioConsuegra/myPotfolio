@@ -2,6 +2,8 @@ import express from "express";
 import nodemailer from "nodemailer";
 import cors from "cors";
 import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+import path from "path";
 
 dotenv.config();
 
@@ -9,7 +11,8 @@ const app = express();
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: ["http://localhost:5173", "https://www.ignacioconsuegra.com"],
+    credentials: true,
   })
 );
 
@@ -47,7 +50,16 @@ app.post("/send-message", async (req, res) => {
     res.status(500).json({ success: false, message: "Failed to send email." });
   }
 });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+try {
+  const buildPath = path.join(__dirname, "../../frontend/dist");
 
-// Render uses process.env.PORT
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  app.use(express.static(buildPath));
+  app.get(/.*/, (req, res) => {
+    res.sendFile(path.join(buildPath, "index.html"));
+  });
+} catch (err) {}
+app.listen(process.env.PORT || 4000, () =>
+  console.log(`🚀 Server running on port ${process.env.PORT || 4000}`)
+);
