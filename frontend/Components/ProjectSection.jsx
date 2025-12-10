@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 import { ArrowRight, ExternalLink, Github } from "lucide-react";
 
@@ -6,8 +6,10 @@ const projects = [
   {
     id: 1,
     title: "Real time Chat",
-    description: "Real time chat using socket io, mongodb and daisy ui for interface.",
-    image: "https://res.cloudinary.com/djhvdnjpz/image/upload/v1762779978/Screenshot_120_lbordt.png",
+    description:
+      "Real time chat using socket io, mongodb and daisy ui for interface.",
+    image:
+      "https://res.cloudinary.com/djhvdnjpz/image/upload/v1762779978/Screenshot_120_lbordt.png",
     tags: ["React", "Socket.io", "Daisyui"],
     demoUrl: "https://real-time-chat-1-icd4.onrender.com/",
     githubUrl: "https://github.com/IgnacioConsuegra/Real-time-chat",
@@ -15,22 +17,24 @@ const projects = [
   {
     id: 2,
     title: "Blog",
-    description:
-      "Blog where each user can create modify and delete a post",
-    image: "https://res.cloudinary.com/djhvdnjpz/image/upload/v1762779978/Screenshot_121_j1zozi.png",
+    description: "Blog where each user can create modify and delete a post",
+    image:
+      "https://res.cloudinary.com/djhvdnjpz/image/upload/v1762779978/Screenshot_121_j1zozi.png",
     tags: ["React", "Express", "daisyui"],
     demoUrl: "https://blog-evtq.onrender.com/",
     githubUrl: "https://github.com/IgnacioConsuegra/Blog/tree/main",
   },
   {
     id: 3,
-    title: "3d web",
+    title: "Good-Hamburger",
     description:
-      "Web to show a 3d asset, in this case a shirt",
-    image: "https://res.cloudinary.com/djhvdnjpz/image/upload/v1762779978/Screenshot_119_pmi9iy.png",
-    tags: ["React", "Express", "ThreeJs"],
-    demoUrl: "https://threed-shirt-1.onrender.com/",
-    githubUrl: "https://github.com/IgnacioConsuegra/3d-shirt",
+      "Frontend demo of a food-ordering app (Next.js + React + Tailwind). Includes a cart with business rules, combo discounts, order history, loading delay simulation, and unit tests for discount logic. ",
+    image:
+      "https://camo.githubusercontent.com/a5312b64ecdda85e768fbf83f224bf610b26c8ff91edd442627cd0e1d7f82f64/68747470733a2f2f7265732e636c6f7564696e6172792e636f6d2f646a6876646e6a707a2f696d6167652f75706c6f61642f76313736353133393239382f53637265656e73686f745f3136345f7876676c38792e6a7067",
+    tags: ["React", "Express", "Next.js"],
+    demoUrl: "https://good-hamburger-psi.vercel.app/cart",
+    githubUrl:
+      "https://github.com/IgnacioConsuegra/Good-Hamburger?tab=readme-ov-file",
   },
 ];
 
@@ -64,7 +68,7 @@ export const ProjectsSection = () => {
 
               <div className="p-6">
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {project.tags.map((tag) => (
+                  {project.tags.map(tag => (
                     <span className="px-2 py-1 text-xs font-medium border rounded-full bg-secondary text-secondary-foreground">
                       {tag}
                     </span>
