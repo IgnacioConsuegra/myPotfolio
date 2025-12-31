@@ -1,8 +1,6 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { fileURLToPath } from "url";
-import path from "path";
 import { Resend } from "resend";
 
 dotenv.config();
@@ -11,17 +9,29 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://www.ignacioconsuegra.com"],
+    origin: [
+      "http://localhost:5173",
+      "https://www.ignacioconsuegra.com",
+      process.env.CLIENT_URL,
+    ],
     credentials: true,
   })
 );
 
 app.use(express.json());
 const resend = new Resend(process.env.RESEND_API_KEY);
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "Server is working" });
+});
 app.post("/send-message", async (req, res) => {
-  const { name, email, message } = req.body;
-
   try {
+    const { name, email, message } = req.body;
+    if (!name || !email || !message) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
     const { data, error } = await resend.emails.send({
       from: "Portfolio <onboarding@resend.dev>",
       to: "ignacioandresconsuegradelacruz@gmail.com",
@@ -41,16 +51,6 @@ app.post("/send-message", async (req, res) => {
   }
 });
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-try {
-  const buildPath = path.join(__dirname, "../../frontend/dist");
-
-  app.use(express.static(buildPath));
-  app.get(/.*/, (req, res) => {
-    res.sendFile(path.join(buildPath, "index.html"));
-  });
-} catch (err) {}
 app.listen(process.env.PORT || 4000, () =>
   console.log(`🚀 Server running on port ${process.env.PORT || 4000}`)
 );

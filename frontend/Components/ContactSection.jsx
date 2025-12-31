@@ -18,12 +18,13 @@ export const ContactSection = () => {
   const [name, setName] = useState("Your name");
   const [email, setEmail] = useState("johndoe@gmail.com");
   const [message, setMessage] = useState("Hello, I'd like to talk about");
+  const base_Url = "http://localhost:4000/send-message";
   const handleSubmit = async e => {
     e.preventDefault();
 
     setIsSubmitting(true);
     const data = { name, email, message };
-    const response = await fetch("https://www.ignacioconsuegra.com/send-message", {
+    const response = await fetch(base_Url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -37,11 +38,10 @@ export const ContactSection = () => {
             description:
               "Thank you for your message. I'll get back to you soon.",
           });
-        }else{
+        } else {
           toast({
             title: "Error",
-            description:
-              "Something went wrong, please try later",
+            description: "Something went wrong, please try later",
           });
         }
       });
@@ -72,10 +72,7 @@ export const ContactSection = () => {
                 </div>
                 <div>
                   <h4 className="font-medium"> Email</h4>
-                  <a
-                    href="mailto:hello@gmail.com"
-                     class="text-muted-foreground hover:text-primary transition-colors break-all"
-                  >
+                  <a class="text-muted-foreground hover:text-primary transition-colors break-all">
                     ignacioandresconsuegradelacruz@gmail.com
                   </a>
                 </div>
@@ -86,10 +83,7 @@ export const ContactSection = () => {
                 </div>
                 <div>
                   <h4 className="font-medium"> Phone</h4>
-                  <a
-                    href="tel:+11234567890"
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
+                  <a className="text-muted-foreground hover:text-primary transition-colors">
                     +57 (315) 295-0340
                   </a>
                 </div>
@@ -109,7 +103,7 @@ export const ContactSection = () => {
 
             <div className="pt-8">
               <h4 className="font-medium mb-4"> Connect With Me</h4>
-              <div className="flex space-x-4 justify-center">
+              <div className="flex space-x-4 justify-center cursor-pointer">
                 <a
                   href="https://www.linkedin.com/in/ignacio-consuegra-b8a9691b1/"
                   target="_blank"
@@ -187,7 +181,7 @@ export const ContactSection = () => {
                 type="submit"
                 disabled={isSubmitting}
                 className={cn(
-                  "cosmic-button w-full flex items-center justify-center gap-2"
+                  "cosmic-button w-full flex items-center justify-center gap-2 cursor-pointer"
                 )}
               >
                 {isSubmitting ? "Sending..." : "Send Message"}
